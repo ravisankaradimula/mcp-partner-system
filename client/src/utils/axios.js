@@ -1,15 +1,15 @@
 import axios from 'axios';
 
 // Create a new axios instance with default config
-const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 // Request interceptor
-instance.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
     // Get token from localStorage
     const token = localStorage.getItem('token');
@@ -35,7 +35,7 @@ instance.interceptors.request.use(
 );
 
 // Response interceptor
-instance.interceptors.response.use(
+api.interceptors.response.use(
   (response) => {
     console.log('Response received:', response.config.url, response.status);
     return response;
@@ -60,4 +60,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance; 
+export default api; 

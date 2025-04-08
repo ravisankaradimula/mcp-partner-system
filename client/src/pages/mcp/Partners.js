@@ -21,7 +21,7 @@ const Partners = () => {
         const headers = { Authorization: `Bearer ${token}` };
         console.log('Fetching partners...');
         
-        const response = await axios.get('http://localhost:5000/api/partner', { headers });
+        const response = await axios.get('${process.env.REACT_APP_API_URL}/partner', { headers });
         console.log('Partners response:', response.data);
         
         setPartners(response.data);

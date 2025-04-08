@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
 const morgan = require('morgan');
 require('dotenv').config();
@@ -12,28 +12,24 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // MongoDB Connection
+
+const client = new MongoClient(process.env.MONGODB_URI, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
     console.log('Connected to MongoDB successfully');
   } catch (error) {
-    console.error('MongoDB connection error:', error.message);
-    console.log('Trying to connect to local MongoDB as fallback...');
-    
-    try {
-      await mongoose.connect('mongodb://localhost:27017/mcp', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
-      console.log('Connected to local MongoDB successfully');
-    } catch (localError) {
-      console.error('Local MongoDB connection error:', localError.message);
-      console.log('Please make sure MongoDB is installed and running, or check your MongoDB Atlas connection string.');
-      // Don't exit the process, let the app continue running
-    }
+    console.error('MongoDB connection error:', error.message);    
+  }
+  finally{
+    await client.close();
   }
 };
 

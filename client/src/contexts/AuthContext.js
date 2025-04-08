@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       console.log('Current token:', token);
       
       // Manually set the token for this request
-      const response = await fetch('http://localhost:5000/api/auth/profile', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/profile`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       console.log('Attempting login with:', email);
       
       // Make a direct fetch request to ensure we're not using the axios instance
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       
       // Manually set the token for the profile request
-      const profileResponse = await fetch('http://localhost:5000/api/auth/profile', {
+      const profileResponse = await fetch(`${process.env.REACT_APP_API_URL}/auth/profile`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       setLoading(true);
       
-      const response = await axios.post('/api/auth/register', userData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, userData);
       const { token, user } = response.data;
       
       if (!token || !user) {

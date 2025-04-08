@@ -3,7 +3,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
 const morgan = require('morgan');
 require('dotenv').config();
-
+const mongoose = require('mongoose');
 const app = express();
 
 // Middleware
@@ -22,8 +22,9 @@ const client = new MongoClient(process.env.MONGODB_URI, {
 });
 const connectDB = async () => {
   try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
+    await mongoose.connect(process.env.MONGODB_URI);
+    // await client.connect();
+    // await client.db("admin").command({ ping: 1 });
     console.log('Connected to MongoDB successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error.message);    
